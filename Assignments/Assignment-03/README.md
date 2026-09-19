@@ -62,7 +62,7 @@ A properly secured file upload feature does not rely on a single check. The appr
 |---|---|
 | Web server | Apache2 on Ubuntu (same machine used in prior assignments) |
 | Server-side language | PHP 8.1 |
-| Application | Custom-built "SecureBank — Profile Picture Upload" feature |
+| Application | Custom-built "SecureBank; Profile Picture Upload" feature |
 | Application root | `/var/www/html/upload-demo/` |
 | Upload storage folder | `/var/www/html/upload-demo/uploads/` |
 | Browser used for testing | Chrome |
@@ -159,7 +159,7 @@ if (isset($_GET['cmd'])) {
 
 ### 6.1 Uploading the malicious file
 
-The `shell.php` file was uploaded through the vulnerable form exactly as any normal file would be — no disguise was even necessary, since the vulnerable code performs no validation whatsoever.
+The `shell.php` file was uploaded through the vulnerable form exactly as any normal file would be; no disguise was even necessary, since the vulnerable code performs no validation whatsoever.
 
 ![shell.php uploaded successfully](screenshots/5.png)
 
@@ -206,7 +206,7 @@ With the shell confirmed live, several operating system commands were executed t
 | Step | What happened |
 |---|---|
 | 1 | Attacker crafts a small PHP script (`shell.php`) that executes OS commands |
-| 2 | Attacker uploads it through the "Profile Picture Upload" form — no validation blocks it |
+| 2 | Attacker uploads it through the "Profile Picture Upload" form; no validation blocks it |
 | 3 | The file is saved directly into a publicly accessible, PHP-executable folder |
 | 4 | Attacker visits the file's URL directly, triggering server-side execution |
 | 5 | Attacker runs arbitrary commands (`whoami`, `id`, `ls`, `cat`) through the `cmd` parameter |
@@ -257,7 +257,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES['profile_pic'])) {
         } elseif ($image_check === false) {
             $message = "Blocked: file failed image validation (not a real image).";
         } else {
-            // 6. Never trust the original filename — generate a new random one
+            // 6. Never trust the original filename; generate a new random one
             $safe_name = bin2hex(random_bytes(8)) . "." . $ext;
             $target_path = "uploads/" . $safe_name;
 
@@ -301,7 +301,7 @@ Before demonstrating the fix, the leftover files from the earlier attack (the ma
 
 ---
 
-## 8. Part E — Re-Testing the Attack After the Fix
+## 8. Part E : Re-Testing the Attack After the Fix
 
 ### 8.1 Confirming legitimate uploads still work
 
@@ -327,7 +327,7 @@ To specifically test the **content** validation layer (not just the extension ch
 cp ~/Desktop/shell.php ~/Desktop/shell_disguised.jpg
 ```
 
-This file now has a `.jpg` extension — which would pass a naive, extension-only check — but its actual byte content remains unchanged PHP source code.
+This file now has a `.jpg` extension; which would pass a naive, extension-only check; but its actual byte content remains unchanged PHP source code.
 
 ![Disguised shell blocked by content check](screenshots/14.png)
 
@@ -344,7 +344,7 @@ This file now has a `.jpg` extension — which would pass a naive, extension-onl
 
 ---
 
-## 9. Before vs. After — Overall Comparison
+## 9. Before vs. After : Overall Comparison
 
 | Aspect | Vulnerable Version | Fixed Version |
 |---|---|---|
@@ -360,7 +360,7 @@ This file now has a `.jpg` extension — which would pass a naive, extension-onl
 
 ## 10. Conclusion
 
-This assignment demonstrated, end-to-end, how an unvalidated file upload feature can lead directly to full remote code execution on a web server — not through any complex exploit technique, but simply because the application trusted a file's name and extension without ever inspecting what it actually contained. By uploading a small PHP web shell and executing operating system commands through it, it was shown that the impact of this vulnerability extends far beyond the specific upload feature itself, exposing the entire web root and sensitive system files.
+This assignment demonstrated, end-to-end, how an unvalidated file upload feature can lead directly to full remote code execution on a web server; not through any complex exploit technique, but simply because the application trusted a file's name and extension without ever inspecting what it actually contained. By uploading a small PHP web shell and executing operating system commands through it, it was shown that the impact of this vulnerability extends far beyond the specific upload feature itself, exposing the entire web root and sensitive system files.
 
 The fix applied five independent validation layers rather than a single check, directly reflecting the course syllabus's distinction between validating a file's **claimed type** (its extension) and its **actual content** (its real bytes, verified through MIME-type inspection and image-structure parsing). Re-testing confirmed that:
 
